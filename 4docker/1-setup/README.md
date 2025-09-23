@@ -190,7 +190,31 @@ To take this option, proceed to [Part 2: Docker Basics](../2-basics/README.md) t
    sudo systemctl start docker
    ```
 
-6. **Verify Installation**
+6. **Configure Docker for OpenStack (MTU Fix)**
+
+   OpenStack VMs use overlay networks with reduced MTU. Configure Docker to match:
+
+   ```console
+   # Check your network interface MTU
+   ip address
+   
+   # Create Docker daemon configuration
+   echo '{"mtu": 1450}' | sudo tee /etc/docker/daemon.json > /dev/null
+
+   # Restart Docker to apply changes
+   sudo systemctl restart docker
+   ```
+
+   **Verify MTU Configuration:**
+
+   ```console
+   # Check Docker bridge MTU
+   ip address show docker0
+   ```
+
+   Both should show MTU 1450 to match your OpenStack network.
+
+7. **Verify Installation**
 
    ```console
    $ docker --version
@@ -255,8 +279,9 @@ Once you have successfully completed this lab:
 
 1. VM is running and accessible via SSH
 2. Docker is installed and working
-3. Network and security are configured
-4. Test container runs successfully
+3. Docker MTU is configured for OpenStack compatibility
+4. Network and security are configured
+5. Test container runs successfully
 
 Proceed to [Part 2: Docker Basics](../2-basics/README.md) to start learning Docker fundamentals.
 
