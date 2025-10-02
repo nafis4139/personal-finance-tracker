@@ -20,7 +20,7 @@ Weekly meeting times is Thursdays as specified below.
 | 14    | E-commerce Platform                                | Ainaz       |              |
 | 15    | Time Tracking and Payroll System                   | Haakon Webb |              |
 | 16    | E-commerce Platform                                | Foroozan.E  |              |
-| 17*   | self-defined - Privacy Age Verification            | -           |              |
+| 17    | self-defined - Privacy Age Verification            | Jayachander |              |
 | 18    | QuickFeed Continuous Deployment                    | Hein        | 13:15        |
 | 19    | Local Student Marketplace                          | Foroozan.E  |              |
 | 20    | Video Streaming Application                        | Jayachander |              |
