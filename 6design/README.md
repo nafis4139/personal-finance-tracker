@@ -3,8 +3,8 @@
 | Lab 6:      | Design Document for Course Project |
 | ----------- | ---------------------------------- |
 | Subject:    | DAT515 Cloud Computing             |
-| Deadline:   | **September 19, 2025 23:59**       |
-| Grading:    | No Grade                           |
+| Deadline:   | **September 30, 2025 23:59**       |
+| Grading:    | Pass/fail                          |
 | Submission: | Group                              |
 
 ## Table of Contents
