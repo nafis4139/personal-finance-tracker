@@ -23,8 +23,8 @@ Weekly meeting times is Thursdays as specified below.
 | 17    | self-defined - Privacy Age Verification            | Jayachander | 12:15        |
 | 18    | QuickFeed Continuous Deployment                    | Hein        | 13:15        |
 | 19    | Local Student Marketplace                          | Foroozan.E  | 14:00        |
-| 20    | Video Streaming Application                        | Jayachander | 12:45        |
-| 21    | Gaming Platform                                    | Jayachander |              |
+| 20    | Video Streaming Application                        | Jayachander | 13:00        |
+| 21    | Gaming Platform                                    | Jayachander | 12:45        |
 | 22    | Personal Finance Tracker                           | Foroozan.E  | 12:30        |
 | 23    | MiniX - Mini Stock Exchange                        | Haakon Webb |              |
 | 24    | ------------------------                           | Jayachander |              |
