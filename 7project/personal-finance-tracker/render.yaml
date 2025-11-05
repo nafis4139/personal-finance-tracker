@@ -7,7 +7,7 @@ services:
   - type: web
     name: pft-api
     env: docker
-    rootDir: backend
+    rootDir: 7project/personal-finance-tracker/backend
     plan: free
     healthCheckPath: /api/healthz
     envVars:
@@ -23,7 +23,7 @@ services:
   - type: web
     name: pft-frontend
     env: docker
-    rootDir: frontend
+    rootDir: 7project/personal-finance-tracker/frontend
     plan: free
     envVars:
       - key: VITE_API_BASE
