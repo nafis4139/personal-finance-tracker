@@ -1,0 +1,30 @@
+# render.yaml
+services:
+  - type: postgres
+    name: pft-db
+    plan: free
+
+  - type: web
+    name: pft-api
+    env: docker
+    rootDir: backend
+    plan: free
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_DSN
+        fromDatabase:
+          name: pft-db
+          property: connectionString
+
+  - type: web
+    name: pft-frontend
+    env: docker
+    rootDir: frontend
+    plan: free
+    envVars:
+      - key: VITE_API_BASE
+        value: /api
