@@ -6,7 +6,7 @@
 // - Uses shared API helper with uniform error handling.
 
 import { useEffect, useMemo, useState } from "react";
-import { api } from "../lib/api";
+import { api, apiList } from "../lib/api";
 
 type Category = {
   id: number;
@@ -27,13 +27,25 @@ export default function Categories() {
   // UI state for errors and in-flight requests.
   const [msg, setMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(false); // avoid blank page on slow/empty loads
 
   // Current filter selection.
   const [filter, setFilter] = useState<Filter>("all");
 
   // Initial load of categories.
   async function load() {
-    setItems(await api<Category[]>("/categories"));
+    try {
+      setLoading(true);
+      setMsg(null);
+      // Use apiList so 204/404/empty gracefully becomes []
+      const data = await apiList<Category>("/categories");
+      setItems(data);
+    } catch (e: any) {
+      setMsg(e.message || "Failed to load categories");
+      setItems([]); // keep UI stable
+    } finally {
+      setLoading(false);
+    }
   }
   useEffect(() => {
     load();
@@ -88,9 +100,9 @@ export default function Categories() {
       };
     }
     return {
-        color: "#F44336",
-        background: "rgba(244, 67, 54, 0.12)",
-        border: "1px solid rgba(244, 67, 54, 0.35)",
+      color: "#F44336",
+      background: "rgba(244, 67, 54, 0.12)",
+      border: "1px solid rgba(244, 67, 54, 0.35)",
     };
   }
 
@@ -166,35 +178,37 @@ export default function Categories() {
 
       <div className="spacer" />
 
-      {/* List or empty message */}
-      <ul className="list">
-        {visible.map((c) => (
-          <li key={c.id} className="list-item">
-            <div>
-              <div className="h2" style={{ fontSize: 18, marginBottom: 4 }}>
-                {c.name}
+      {/* Loading, list or empty message */}
+      {loading ? (
+        <div className="muted">Loading…</div>
+      ) : (
+        <ul className="list">
+          {visible.map((c) => (
+            <li key={c.id} className="list-item">
+              <div>
+                <div className="h2" style={{ fontSize: 18, marginBottom: 4 }}>
+                  {c.name}
+                </div>
+                <span className="badge" style={badgeStyle(c.type)}>
+                  {c.type}
+                </span>
               </div>
-              <span className="badge" style={badgeStyle(c.type)}>
-                {c.type}
-              </span>
-            </div>
-            <button
-              className="btn btn-danger"
-              disabled={busy}
-              onClick={() => del(c.id)}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-        {visible.length === 0 && (
-          <li className="muted">
-            {filter === "all"
-              ? "No categories yet."
-              : `No ${filter} categories yet.`}
-          </li>
-        )}
-      </ul>
+              <button
+                className="btn btn-danger"
+                disabled={busy}
+                onClick={() => del(c.id)}
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+
+          {/* When no categories, show a friendly message instead of a blank page */}
+          {visible.length === 0 && (
+            <li className="muted">No Categories Yet!</li>
+          )}
+        </ul>
+      )}
     </div>
   );
 }
