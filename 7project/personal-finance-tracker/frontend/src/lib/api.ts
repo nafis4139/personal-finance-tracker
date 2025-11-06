@@ -1,4 +1,5 @@
 // frontend/src/lib/api.ts
+
 // Thin HTTP client for the frontend. Provides three helpers with consistent error handling:
 // - api: strict call (200–299 → parsed JSON; 204 → undefined; errors throw)
 // - apiList: list-friendly (returns [] for 204/404/empty; errors throw)
