@@ -4,6 +4,7 @@ package repo
 
 import (
 	"context"
+	"strconv"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -72,11 +73,14 @@ func (r *TransactionRepo) List(ctx context.Context, userID int64, f TxnListFilte
 		args = append(args, *f.Type)
 		i++
 	}
-	q += " ORDER BY date DESC, id DESC"
+
+	// Ascending order feels natural for Jan→Dec charts; id tie-breaker for stability.
+	q += " ORDER BY date ASC, id ASC"
 
 	// Guardrails for pagination inputs.
-	if f.Limit <= 0 || f.Limit > 200 {
-		f.Limit = 50
+	// Generous defaults and upper bounds so the yearly view can fetch everything in one go.
+	if f.Limit <= 0 || f.Limit > 5000 {
+		f.Limit = 500
 	}
 	if f.Offset < 0 {
 		f.Offset = 0
@@ -152,6 +156,4 @@ func (r *TransactionRepo) Delete(ctx context.Context, userID, id int64) (bool, e
 }
 
 // itoa converts an integer to a string for SQL placeholder construction.
-// Note: this implementation produces two characters by combining the tens and ones digits.
-// For example: 2 -> "02", 12 -> "12". Intended for small placeholder indices in this path.
-func itoa(i int) string { return string('0'+rune(i/10)) + string('0'+rune(i%10)) }
+func itoa(i int) string { return strconv.Itoa(i) }

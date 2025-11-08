@@ -34,7 +34,7 @@ type txnUpdateReq = txnCreateReq
 // - from/to: date range in YYYY-MM-DD
 // - type: "income" or "expense"
 // - category_id: integer category filter
-// - limit/page: pagination (page is zero-based, offset = page * limit)
+// - limit/offset: pagination (offset is a row index, not a page number)
 func (api *API) ListTransactions(c *gin.Context) {
 	userID := MustUserID(c)
 	var (
@@ -42,8 +42,6 @@ func (api *API) ListTransactions(c *gin.Context) {
 		toStr   = c.Query("to")
 		typ     = c.Query("type")
 		cidStr  = c.Query("category_id")
-		limit   = asInt(c.Query("limit"), 50)
-		offset  = asInt(c.Query("page"), 0) * limit
 	)
 
 	// Parse optional date bounds; ignore invalid formats silently.
@@ -71,6 +69,19 @@ func (api *API) ListTransactions(c *gin.Context) {
 		if v, err := strconv.ParseInt(cidStr, 10, 64); err == nil {
 			cidPtr = &v
 		}
+	}
+
+	// --- limit / offset with sane defaults and clamps ---
+	limit := asInt(c.Query("limit"), 500)
+	if limit <= 0 {
+		limit = 500
+	}
+	if limit > 5000 {
+		limit = 5000
+	}
+	offset := asInt(c.Query("offset"), 0)
+	if offset < 0 {
+		offset = 0
 	}
 
 	// Query repository with assembled filters and pagination.
