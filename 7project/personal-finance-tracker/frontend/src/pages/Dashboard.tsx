@@ -122,7 +122,7 @@ export default function Dashboard() {
     try {
       setLoadingData(true);
       const { start, end } = yearStartEnd(year);
-      const [list] = await Promise.all([ apiList<Txn>(`/transactions?from=${start}&to=${end}`) ]);
+      const [list] = await Promise.all([ apiList<Txn>(`/transactions?from=${start}&to=${end}&limit=5000`) ]);
       setTxns(list);
 
       // Budgets by month → flatten to a single array.
