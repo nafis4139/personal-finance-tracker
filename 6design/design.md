@@ -3,9 +3,9 @@
 
 | Field          | Value                        |
 | -------------- | ---------------------------- |
-| Project Name   |  Personal Finance Tracker    |
-| Team Members   |  B M Nafis Fuad              |
-| Repository URL |                              |
+| Project Name   | Personal Finance Tracker     |
+| Team Members   | B M Nafis Fuad               |
+| Repository URL | https://github.com/dat515-2025/Group-24/tree/main/7project                            |
 | Version        | v0.1                         |
 | Last Updated   | 2025-10-30                   |
 
@@ -47,7 +47,6 @@ flowchart LR
   ui --> api[Backend API]
   api --> auth[Auth Service]
   api --> db[(Database)]
-  api --> cache[(Cache)]
 ```
 **Components and responsibilities:**  
 - **Web App:**  
@@ -61,20 +60,17 @@ flowchart LR
     
 - **Database:**  
   Stores persistent data such as users, transactions, categories and budgets.
- 
-- **Cache:**  
-  Used for caching frequently accessed data and storing sessions.
 
 **Data flow:**  
-1. User actions in the web app trigger API requests.  
-2. API authenticates via Auth Service and reads/writes from Database.  
-3. Cache accelerates access to recent analytics to reduce DB load.  
-4. Responses returned to Web App for display.
+1. User submits actions in the Web App.  
+2. Frontend sends authenticated requests (JWT) to the API.  
+3. API validates & executes queries on PostgreSQL.  
+4. API returns JSON for UI/Charts.
 
 **State management:**  
-- Persistent data in PostgreSQL (users, transactions, budgets).  
-- Cached analytics in Redis (cached summaries, sessions).  
-- Frontend uses local storage for session tokens  
+- Persistent: PostgreSQL  
+- Client session: JWT stored in browser (local storage) 
+- No cache layer in this version.  
 
 ### 2.2 Data model
 - User
@@ -205,13 +201,12 @@ erDiagram
 
 | Technology / Service     | Role                         | Why chosen (brief)                | Alternatives |
 |--------------------------|------------------------------|-----------------------------------|--------------|
-| **Go (Gin/Fiber)**       | Backend API                  | Fast, typed, simple handlers      | Node, Flask  |
+| **Go (Gin)**             | Backend API                  | Fast, typed, simple handlers      | Node, Flask  |
 | **React + TypeScript**   | Web App UI                   | Familiar, typed components        | Vue, Svelte  |
 | **PostgreSQL**           | Database                     | Strong relational + constraints   | MySQL        |
-| **Redis**                | Cache                        | Fast cached summaries/sessions    | Memcached    |
 | **Docker + Compose**     | Dev/Prod containers          | Reproducible env                  | Podman       |
-| **Render/Railway/Fly.io**| Hosting, managed Postgres    | Simple deploys, free tiers        | AWS/GCP/Azure|
-| **Recharts/Chart.js**    | Charts                       | Quick, lightweight visuals        | D3           |
+| **Render**               | Hosting, managed Postgres    | Simple deploys, free tiers        | AWS/GCP/Azure|
+| **Recharts**             | Charts                       | Quick, lightweight visuals        | D3           |
 | **GitHub Actions**       | CI/CD                        | Build/test/deploy on push         | Jenkins      |
 
 ## 4. Deployment
@@ -225,7 +220,6 @@ flowchart TB
   user((User)) --> web[React Frontend]
   web --> api[Backend Go API]
   api --> db[(Managed PostgreSQL)]
-  api --> cache[(Redis)]
 ```
 
 **Runtime platform:** Docker containers (frontend, backend, db)
