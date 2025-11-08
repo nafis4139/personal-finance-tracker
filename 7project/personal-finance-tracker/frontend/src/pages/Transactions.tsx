@@ -149,6 +149,28 @@ export default function Transactions(){
   const totalInc = filtered.filter(t=>t.type==="income").reduce((a,b)=>a+b.amount,0);
   const totalExp = filtered.filter(t=>t.type==="expense").reduce((a,b)=>a+b.amount,0);
 
+  // --- NEW: badge style same as Categories page (green for income, red for expense).
+  function typeBadgeStyle(t: "income" | "expense"): React.CSSProperties {
+    if (t === "income") {
+      return {
+        color: "#4CAF50",
+        background: "rgba(76, 175, 80, 0.12)",
+        border: "1px solid rgba(76, 175, 80, 0.35)",
+      };
+    }
+    return {
+      color: "#F44336",
+      background: "rgba(244, 67, 54, 0.12)",
+      border: "1px solid rgba(244, 67, 54, 0.35)",
+    };
+  }
+
+  // Helper to resolve a category name for a transaction (falls back to "Uncategorized").
+  function categoryNameFor(t: Txn): string {
+    if (t.category_id == null) return "Uncategorized";
+    return cats.find(c => c.id === t.category_id)?.name ?? `#${t.category_id}`;
+  }
+
   return (
     <div className="card section">
       <h1 className="h1">Transactions</h1>
@@ -253,8 +275,13 @@ export default function Transactions(){
         <ul className="list">
           {filtered.map(t=>(
             <li key={t.id} className="list-item">
-              <div style={{display:"flex", gap:10, alignItems:"center"}}>
-                <span className="badge">{t.type}</span>
+              <div style={{display:"flex", gap:10, alignItems:"center", flexWrap:"wrap"}}>
+                {/* Colored income/expense label (same palette as Categories) */}
+                <span className="badge" style={typeBadgeStyle(t.type)}>{t.type}</span>
+
+                {/* Category name right after the label */}
+                <span className="badge">{categoryNameFor(t)}</span>
+
                 <div style={{fontWeight:700}}>{t.amount.toFixed(2)}</div>
                 <div className="muted">{t.date.slice(0,10)}</div>
                 {t.description && <div className="muted">• {t.description}</div>}
