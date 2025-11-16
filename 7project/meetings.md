@@ -120,8 +120,6 @@ I need to update the following things in my report,
 - Add ER-diagram from my `design.md` to `report.md`. 
 - I should add brief description for each testing instruction about what it is doing
 - Update the Hour Sheet
-    
-I am missing build instructions in my frontend and backend part of the code. I can add readme file for each of these sections. 
 
 I haven't updated my `meetings.md`, I have to update it.
 
@@ -130,7 +128,6 @@ I haven't updated my `meetings.md`, I have to update it.
 
 - [x] Properly explain the Architecture overview in Report
 - [x] Update testing part of the report with a brief description
-- [x] Add proper Instructions for how to build the backend, frontend and docker deployment
 - [x] Add proper testing instructions
 - [x] Update `report.md` file
 - [x] Update `meetings.md` file
