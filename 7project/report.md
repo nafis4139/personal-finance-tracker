@@ -232,9 +232,9 @@ curl -s "$BASE/healthz"
 
 ## Presentation Video
 
-**YouTube Link**: [Insert your YouTube link here]
+**YouTube Link**: [\[Personal Finance Tracker\]](https://www.youtube.com/watch?v=Ke1JY3yQggc)
 
-**Duration**: [X minutes Y seconds]
+**Duration**: 09 minutes 03 seconds
 
 **Video Includes**:
 
@@ -404,7 +404,7 @@ docker compose -f docker-compose.dev.yml down -v \
 | 09 Nov    | Testing                  | 02      | Unit tests for API endpoints        |
 | 08 Nov    | Documentation            | 10      | Updated README and design doc       |
 | 08 Nov    | Frontend Development     | 16      | Created user interface mockups            |
-| 08 Nov    | Integration              | 04     | Connected frontend to backend API         |
+| 08 Nov    | Integration              | 04      | Connected frontend to backend API         |
 | 08 Nov    | Deployment               | 15      | Docker configuration and cloud deployment |
 | 09 Nov    | Testing                  | 03      | End-to-end testing                        |
 | 08 Nov    | Database Design          | 10      | Schema design and implementation |
