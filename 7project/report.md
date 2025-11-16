@@ -185,6 +185,37 @@ erDiagram
 
 ### 2.4 System Workflow
 
+1. User Login
+  - The user opens the web app (React on Render).
+  - The login form sends a `POST /api/login` request.
+  - Nginx forwards the request to the backend API.
+  - The Go backend checks the email & password in PostgreSQL.
+  - If correct, the backend returns a JWT token.
+  - The frontend saves the token and redirects the user to the dashboard.
+2. Adding a Transaction
+  - The user fills in the transaction form (amount, category, date, etc.).
+  - Frontend sends `POST /api/transactions` with `**Authorization: Bearer <JWT>**`.
+  - Backend validates the JWT and gets the user ID.
+  - Backend inserts a new transaction into PostgreSQL using the repo layer.
+  - Frontend updates the list and charts.
+3. Viewing Dashboard Summary
+  - The dashboard page loads and requests `/api/dashboard/summary`.
+  - Backend reads all transactions (and budgets) for the selected period.
+  - Backend calculates:
+    - total income/expenses
+    - category spending
+    - monthly totals
+  - Returns the summary as JSON.
+  - Frontend displays charts and tables with Recharts.
+4. Managing Categories & Budgets
+  - Categories and budgets follow the same flow:
+    - Frontend sends create/update/delete requests.
+    - Backend validates the JWT and checks if the category/budget belongs to the user.
+    - Repository layer writes changes to PostgreSQL.
+    - UI updates instantly.
+
+This following sequence diagram summarizes how frontend, backend, and database work together for typical user actions.
+
 ```mermaid
 sequenceDiagram
   participant U as User Browser
@@ -221,15 +252,15 @@ sequenceDiagram
 - **Visualization**: Recharts (for dashboards)
 - **Testing**: Go testing, Playwright (E2E), Vitest (frontend unit), k6 (performance)
 
-## Prerequisites
+## 3. Prerequisites
 
-### System Requirements
+### 3.1 System Requirements
 
 - Operating System: Linux, macOS, Windows
 - Minimum RAM: 8GB
 - Storage: 10GB free space
 
-### Required Software
+### 3.2 Required Software
 
 - Docker Engine 20.10+
 - Node.js 18+
@@ -238,7 +269,7 @@ sequenceDiagram
 - npm
 - WSL (Ubuntu 24.04)
 
-## Build Instructions
+## 4. Build Instructions
 
 ### 1. Clone the Repository
 
