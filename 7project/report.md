@@ -192,12 +192,14 @@ erDiagram
 - The Go backend checks the email & password in PostgreSQL.
 - If correct, the backend returns a JWT token.
 - The frontend saves the token and redirects the user to the dashboard.
+
 **02. Adding a Transaction**
 - The user fills in the transaction form (amount, category, date, etc.).
 - Frontend sends `POST /api/transactions` with `**Authorization: Bearer <JWT>**`.
 - Backend validates the JWT and gets the user ID.
 - Backend inserts a new transaction into PostgreSQL using the repo layer.
 - Frontend updates the list and charts.
+
 **03. Viewing Dashboard Summary**
 - The dashboard page loads and requests `/api/dashboard/summary`.
 - Backend reads all transactions (and budgets) for the selected period.
@@ -207,6 +209,7 @@ erDiagram
   - monthly totals
 - Returns the summary as JSON.
 - Frontend displays charts and tables with Recharts.
+
 **04. Managing Categories & Budgets**
 - Categories and budgets follow the same flow:
   - Frontend sends create/update/delete requests.
@@ -263,11 +266,14 @@ sequenceDiagram
 ### 3.2 Required Software
 
 - Docker Engine 20.10+
-- Node.js 18+
+- WSL (Ubuntu 24.04).
+
+### 3.3 Dependencies
+
+- Node.js 20+
 - Go 1.25+
 - Git
 - npm
-- WSL (Ubuntu 24.04)
 
 ## 4. Build Instructions
 
@@ -294,9 +300,9 @@ npm install
 
 ```
 
-## Deployment Instructions
+## 5. Deployment Instructions
 
-### Local Deployment
+### 5.1 Local Deployment
 
 - Start Docker Desktop.
 
@@ -307,7 +313,7 @@ docker compose -f docker-compose.dev.yml build
 docker compose -f docker-compose.dev.yml up -d
 ```
 
-### Cloud Deployment (Render)
+### 5.2 Cloud Deployment (Render)
 
 The project is deployed on Render Cloud using **render.yaml** for automated provisioning. After logging into Render, click the New button at top right corner and select **Blueprint**. From there connect the GitHub repository containing the project.
 
@@ -317,7 +323,7 @@ The project is deployed on Render Cloud using **render.yaml** for automated prov
 | Backend API      | https://pft-api-x9xf.onrender.com      |
 | Database         | Managed PostgreSQL (Render)            |
 
-### Verification
+### 5.3 Verification
 
 **Health Check**
 ```bash
@@ -325,9 +331,9 @@ curl https://pft-api-x9xf.onrender.com/api/healthz
 
 ```
 
-## Testing Instructions
+## 6. Testing Instructions
 
-### Unit Tests
+### 6.1 Unit Tests
 
 ```bash
 cd backend/
@@ -335,14 +341,14 @@ mkdir -p /tmp/dc
 docker --config /tmp/dc run --rm -v "$PWD":/app -w /app golang:1.25   bash -lc 'export PATH=$PATH:/usr/local/go/bin; go test ./...'
 ```
 
-### Integration Tests
+### 6.2 Integration Tests
 
 ```bash
 cd backend/
 PG_TEST_DSN="postgres://app:app@localhost:5432/app?sslmode=disable" go test ./integration -v
 ```
 
-### End-to-End Tests
+### 6.3 End-to-End Tests
 
 ```bash
 cd frontend/
@@ -354,7 +360,7 @@ E2E_BASE=http://localhost:8080 npx playwright test                    #localhost
 E2E_BASE=https://pft-frontend-h0qd.onrender.com npx playwright test   #Render
 ```
 
-### Performance testing
+### 6.4 Performance testing
 
 ```bash
 cd ..             #root directory
@@ -362,9 +368,9 @@ mkdir -p /tmp/dc
 DOCKER_CONFIG=/tmp/dc docker run --rm   -e BASE=https://pft-api-x9xf.onrender.com/api   -v "$PWD/perf":/scripts grafana/k6 run /scripts/login_k6.js
 ```
 
-## Usage Examples
+## 7. Usage Examples
 
-### Usage - via Web App
+### 7.1 Usage - via Web App
 
 01. Open the deployed frontend:
     https://pft-frontend-h0qd.onrender.com
@@ -389,7 +395,7 @@ DOCKER_CONFIG=/tmp/dc docker run --rm   -e BASE=https://pft-api-x9xf.onrender.co
     - Click Budgets → set your monthly limit and compare against your total spending.
     - The dashboard updates dynamically with Recharts.
 
-### API Usage
+### 7.2 API Usage
 
 01. Set Base URL (Render)
 ```bash
@@ -427,7 +433,7 @@ curl -s "$BASE/healthz"
 
 ---
 
-## Presentation Video
+## 8. Presentation Video
 
 **YouTube Link**: [\[Personal Finance Tracker\]](https://www.youtube.com/watch?v=Ke1JY3yQggc)
 
@@ -440,9 +446,9 @@ curl -s "$BASE/healthz"
 - [x] Code walkthrough
 - [x] Build and deployment showcase
 
-## Troubleshooting
+## 9. Troubleshooting
 
-### Common Issues
+### 9.1 Common Issues
 
 #### Issue 1: HTTP 502 – Bad Gateway when Logging In
 
@@ -507,7 +513,7 @@ curl -s "$BASE/healthz"
   ```
   - Added explicit limit and offset handling in the Go backend (ListTransactions).
 
-### Debug Commands
+### 9.2 Debug Commands
 
 **Local/Docker**
 
@@ -571,51 +577,58 @@ docker compose -f docker-compose.dev.yml down -v \
 
 ---
 
-## Progress Table
+## 10. Progress Table
 
-| Task/Component                                                      | Assigned To | Status        | Time Spent | Difficulty | Notes       |
-| ------------------------------------------------------------------- | ----------- | ------------- | ---------- | ---------- | ----------- |
-| Project Setup & Repository                                          | Nafis      | ✅ Complete    | 1 hours  | Easy     |  |
-| [Design Document](https://github.com/dat515-2025/Group-24/blob/main/7project/design.md)         | Nafis      | ✅ Complete    | 8 hours  | Medium       |  |
-| [Backend API Development](https://github.com/dat515-2025/Group-24/tree/main/7project/personal-finance-tracker/backend) | Nafis     | ✅ Complete    | 32 hours  | Hard       |  |
-| [Database Setup & Models](https://github.com/dat515-2025/Group-24) | Nafis      | ✅ Complete    | 10 hours  | Medium     |  |
-| [Frontend Development](https://github.com/dat515-2025/Group-24/tree/main/7project/personal-finance-tracker/frontend)    | Nafis      | ✅ Complete | 16 hours  | Medium     |  |
-| [Docker Configuration](https://github.com/dat515-2025/Group-24)    | Nafis      | ✅ Complete    | 12 hours  | Easy       |  |
-| [Cloud Deployment](https://github.com/dat515-2025/Group-24/blob/main/render.yaml)        | Nafis      | ✅ Complete    | 15 hours  | Hard       |  |
-| [Testing Implementation](https://github.com/dat515-2025/Group-24)  | Nafis      | ✅ Complete     | 5 hours  | Medium     |  |
-| [Documentation](https://github.com/dat515-2025/Group-24)           | Nafis      | ✅ Complete    | 6 hours | Easy       |  |
-| [Presentation Video](https://github.com/dat515-2025/Group-24)      | Nafis      | ⏳ Pending    | X hours  | Medium     |  |
+| Task/Component                                                                                                         | Assigned To | Status        | Time Spent | Difficulty | Notes       |
+| ---------------------------------------------------------------------------------------------------------------------- | ----------- | ------------  | ---------- | ---------- | ----------- |
+| Project Setup & Repository                                                                                             | Nafis       | ✅ Complete   | 01 hours   | Easy       |             |
+| [Design Document](https://github.com/dat515-2025/Group-24/blob/main/7project/design.md)                                | Nafis       | ✅ Complete   | 08 hours   | Medium     |             |
+| [Backend API Development](https://github.com/dat515-2025/Group-24/tree/main/7project/personal-finance-tracker/backend) | Nafis       | ✅ Complete   | 33 hours   | Hard       |             |
+| [Database Setup & Models](https://github.com/dat515-2025/Group-24)                                                     | Nafis       | ✅ Complete   | 10 hours   | Medium     |             |
+| [Frontend Development](https://github.com/dat515-2025/Group-24/tree/main/7project/personal-finance-tracker/frontend)   | Nafis       | ✅ Complete   | 16 hours   | Medium     |             |
+| [Docker Configuration](https://github.com/dat515-2025/Group-24)                                                        | Nafis       | ✅ Complete   | 06 hours   | Easy       |             |
+| [Cloud Deployment](https://github.com/dat515-2025/Group-24/blob/main/render.yaml)                                      | Nafis       | ✅ Complete   | 18 hours   | Hard       |             |
+| [Testing Implementation](https://github.com/dat515-2025/Group-24)                                                      | Nafis       | ✅ Complete   | 09 hours   | Medium     |             |
+| [Documentation](https://github.com/dat515-2025/Group-24)                                                               | Nafis       | ✅ Complete   | 16 hours   | Medium     |             |
+| [Presentation Video](https://github.com/dat515-2025/Group-24)                                                          | Nafis       | ✅ Complete   | 07 hours   | Medium     |             |
 
-**Legend**: ✅ Complete | 🔄 In Progress | ⏳ Pending | ❌ Not Started
-
-## Hour Sheet
+## 11. Hour Sheet
 
 [Link to the specific commit on GitHub for each contribution.](https://github.com/dat515-2025/Group-24/commits/main/?author=nafis4139)
 
 ### B M Nafis Fuad
 
-| Date      | Activity                 | Hours      | Description                         |
-| --------- | ------------------------ | ---------- | ----------------------------------- |
-| 30 Oct    | Initial Setup            | 01      | Repository setup, project structure |
-| 08 Nov    | Backend Development      | 32      | Implemented user authentication     |
-| 09 Nov    | Testing                  | 02      | Unit tests for API endpoints        |
-| 08 Nov    | Documentation            | 10      | Updated README and design doc       |
-| 08 Nov    | Frontend Development     | 16      | Created user interface mockups            |
-| 08 Nov    | Integration              | 04      | Connected frontend to backend API         |
-| 08 Nov    | Deployment               | 15      | Docker configuration and cloud deployment |
-| 09 Nov    | Testing                  | 03      | End-to-end testing                        |
-| 08 Nov    | Database Design          | 10      | Schema design and implementation |
-| 08 Nov    | Cloud Configuration      | 15      | Render setup and configuration  |
-|           | Performance Optimization |         | Caching and query optimization   |
-|           | Monitoring               |         | Logging and monitoring setup     |
-| **Total** |                          | **108** |                                     |
+| Date      | Activity                    | Hours   | Description                                                          |
+| --------- | --------------------------- | ------- | -------------------------------------------------------------------- |
+| 30 Oct    | Initial Setup               | 1       | Repository setup, project structure                                  |
+| 30 Oct    | Database Design             | 4       | Designed ERD, created migrations, set up schema relations            |
+| 31 Oct    | Database Design             | 6       | Designed ERD, created migrations, set up schema relations            |
+| 31 Oct    | Backend Foundations         | 8       | Started Go backend, configured modules, routing structure            |
+| 01 Nov    | Backend Development         | 10      | Implemented registration, login, JWT authentication, middleware      |
+| 01 Nov    | Backend Development         | 5       | Added CRUD endpoints for Categories, Transactions, Budgets           |
+| 02 Nov    | Backend Development         | 3       | Added CRUD endpoints for Categories, Transactions, Budgets           |
+| 02 Nov    | Backend Enhancements        | 7       | Added dashboard monthly/yearly summary, validation improvements      |
+| 02 Nov    | Docker Setup                | 6       | Wrote multi-stage Dockerfiles for frontend and backend               |
+| 03 Nov    | Deployment (Backend)        | 6       | Configured Render backend service, fixed DB_DSN & migration issues   |
+| 03 Nov    | Frontend UI Development     | 10      | Built login, register, dashboard, budgets, transactions, category UI |
+| 03 Nov    | Frontend Visualization      | 2       | Added Recharts graphs, responsive layout, UX improvements            |
+| 04 Nov    | Frontend Visualization      | 4       | Added Recharts graphs, responsive layout, UX improvements            |
+| 04 Nov    | Integration (FE & BE)       | 6       | Connected frontend to backend API using JWT and API wrapper          |
+| 04 Nov    | Deployment (Frontend)       | 7       | Nginx config, proxy to backend, fixed HTTPS issues on Render         |
+| 05 Nov    | Debugging Deployment Issues | 5       | Fixed TLS proxy issue, installed CA certificates, redeployed         |
+| 05 Nov    | Backend Testing             | 3       | Wrote Go unit tests, integration tests with Postgres                 |
+| 05 Nov    | Frontend Testing            | 2       | Added Vitest, testing library, login/register UI tests               |
+| 09 Nov    | Performance Testing         | 4       | Setup k6, wrote performance script, load tested login & healthz      |
+| 11 Nov    | Documentation               | 10      | Updated design.md, report.md, testing guide                          |
+| 16 Nov    | Presentation Video          | 7       | Screen recording, script writing, editing, upload to YouTube         |
+| 16 Nov    | Documentation               | 6       | Updated report.md                                                    |
+| **Total** |                             | **122** |                                                                      |
 
-
-### Group Total: 108 hours
+### Group Total: 122 hours
 
 ---
 
-## Final Reflection
+## 12. Final Reflection
 
 ### What I Learned
 
@@ -637,5 +650,5 @@ I became proficient in Go backend development, DevOps (Docker + Render), and end
 
 ---
 
-**Report Completion Date**: 09 November 2025
-**Last Updated**: 09 November 2025
+**Report Completion Date**: 16 November 2025
+**Last Updated**: 16 November 2025
